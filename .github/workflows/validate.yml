@@ -1,0 +1,36 @@
+name: Validate package
+
+'on':
+  push:
+    branches: [master, develop]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          coverage: none
+
+      - name: Validate Composer manifest
+        run: composer --no-plugins --no-scripts validate --strict --no-check-lock
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress --no-plugins --no-scripts
+
+      - name: Validate skills, routing, and consumer paths
+        run: php scripts/validate_resources.php

@@ -13,6 +13,9 @@
     "require": {
         "laravel/boost": "^2.0"
     },
+    "require-dev": {
+        "symfony/yaml": "^7.0"
+    },
     "authors": [
         {
             "name": "VMaarsson",
