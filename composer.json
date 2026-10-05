@@ -10,8 +10,8 @@
         "guidelines",
         "skills"
     ],
-    "suggest": {
-        "laravel/boost": "Integrates package guidelines and skills with Laravel Boost."
+    "require": {
+        "laravel/boost": "^2.0"
     },
     "authors": [
         {
