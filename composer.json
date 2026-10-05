@@ -2,6 +2,7 @@
     "name": "maarsson/agent-guidelines",
     "description": "Reusable, opinionated guidelines and skills for AI coding agents.",
     "type": "library",
+    "license": "MIT",
     "keywords": [
         "ai",
         "agents",
