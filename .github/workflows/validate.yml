@@ -35,3 +35,6 @@ jobs:
 
       - name: Validate skills, routing, and consumer paths
         run: php scripts/validate_resources.php
+
+      - name: Test skill directory linking
+        run: php tests/link_skills.php

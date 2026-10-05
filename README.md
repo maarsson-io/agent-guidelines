@@ -20,10 +20,33 @@ Run these commands in the consumer Laravel project:
 
 ```bash
 composer require --dev maarsson/agent-guidelines
+vendor/bin/agent-guidelines-link-skills
 php artisan boost:install
 ```
 
 Composer also installs Laravel Boost if needed. If Boost is already configured, rerun its installer to enable this package.
+
+The linking command creates `.agents/skills` as the canonical directory, with `.claude/skills` and `.github/skills` pointing to `../.agents/skills`. Run it before the Boost installer so the selected agents share the same skills, including your own local skills and those installed by Boost.
+
+The command preserves existing skills and correct symlinks, and can be rerun. It refuses conflicting files, real skill directories, or links pointing elsewhere. If Boost has already created separate skill directories, move or merge their contents manually before linking. The `.agents`, `.claude`, and `.github` parent directories must be real directories.
+
+By default, it uses the current directory; you can also pass a project directory:
+
+```bash
+vendor/bin/agent-guidelines-link-skills /path/to/consumer
+```
+
+To run it through Composer, add a script to the **consumer project's** `composer.json`:
+
+```json
+{
+    "scripts": {
+        "agent-skills:link": "agent-guidelines-link-skills"
+    }
+}
+```
+
+Then run `composer agent-skills:link`. Merge this entry into any existing scripts. Dependency packages' own Composer scripts do not run automatically.
 
 In the installer, enable guidelines and skills, select your coding agents, and tick **`maarsson/agent-guidelines`** when prompted: "Which third-party AI guidelines/skills would you like to install?"
 

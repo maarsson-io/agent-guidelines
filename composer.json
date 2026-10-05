@@ -22,6 +22,9 @@
             "email": "viktor@maarsson.io"
         }
     ],
+    "bin": [
+        "bin/agent-guidelines-link-skills"
+    ],
     "config": {
         "sort-packages": true
     }
