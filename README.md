@@ -10,6 +10,43 @@ Reusable, opinionated guidelines and skills for AI coding agents.
 
 Shared instructions are intended for use across projects. Project-specific templates provide a starting point for local rules and context. Also an additive overlay for Laravel Boost.
 
+## Install
+
+Run these commands in the consumer Laravel project:
+
+```bash
+composer require --dev maarsson/agent-guidelines
+php artisan boost:install
+```
+
+Composer also installs Laravel Boost if needed. If Boost is already configured, rerun its installer to enable this package.
+
+In the installer, enable guidelines and skills, select your coding agents, and tick **`maarsson/agent-guidelines`** when prompted: "Which third-party AI guidelines/skills would you like to install?"
+
+Boost saves this selection in `boost.json`. It includes this package's core guideline in the selected agents' instruction files and copies the four skills, including their supporting files, into the agents' skills directories. See the [Laravel Boost documentation](https://laravel.com/framework/docs/13.x/boost) for agent setup details.
+
+> ### Non-interactive installation
+>
+> `php artisan boost:install --no-interaction` uses the package selection already saved in `boost.json`; it does not opt into third-party packages automatically.
+>
+> Commit the consumer project's configured `boost.json` before running the installer non-interactively. Ensure its `packages` array includes `maarsson/agent-guidelines`, preserving any other selected packages. For example, a Codex setup with guidelines and skills enabled:
+>
+> ```json
+> {
+>     "agents": ["codex"],
+>     "guidelines": true,
+>     "packages": ["maarsson/agent-guidelines"],
+>     "skills": [
+>         "laravel-best-practices-overlay",
+>         "vue-frontend-best-practices",
+>         "specification-driven-development",
+>         "code-reviewing"
+>     ]
+> }
+> ```
+>
+> Adapt this example to your agents and features; preserve other installed skills in an existing configuration.
+
 ## How instructions are loaded
 
 When this package is selected during Laravel Boost setup, Boost includes the contents of `resources/boost/guidelines/core.blade.php` in the consumer project's `AGENTS.md`. The core contains shared instruction priorities and routing to guidelines and skills loaded only when relevant.
