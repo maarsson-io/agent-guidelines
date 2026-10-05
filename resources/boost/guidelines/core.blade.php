@@ -28,10 +28,10 @@ Project templates are starting points for local instructions, not facts about th
 
 Paths are evaluated from the consumer application's root, not from this source file. Shared guideline filenames below are relative to `vendor/maarsson/agent-guidelines/resources/guidelines/`.
 
-At the start of each task, read the consumer's `.agents/guidelines/maintainer.md` if present; otherwise read the package's optional `maintainer.md` if present. When working on the application, also read `.agents/guidelines/project.md` if present and follow its routing to relevant local instructions. Skip absent optional local files; do not substitute unadapted project templates.
-
 | When | Shared guideline |
 | --- | --- |
+| At the start of every task | `maintainer.md` |
+| When working on this application | `project.md` |
 | Before planning, implementing, or reviewing a change | `responsibilities.md` |
 | When choosing or reviewing a solution | `development-principles.md` |
 | When planning, implementing, or reviewing Laravel backend changes | `backend-development.md` |
