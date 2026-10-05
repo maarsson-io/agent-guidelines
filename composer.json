@@ -13,6 +13,12 @@
     "suggest": {
         "laravel/boost": "Integrates package guidelines and skills with Laravel Boost."
     },
+    "authors": [
+        {
+            "name": "VMaarsson",
+            "email": "viktor@maarsson.io"
+        }
+    ],
     "config": {
         "sort-packages": true
     }
