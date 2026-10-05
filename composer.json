@@ -1,0 +1,18 @@
+{
+    "name": "maarsson/agent-guidelines",
+    "description": "Reusable, opinionated guidelines and skills for AI coding agents.",
+    "type": "library",
+    "keywords": [
+        "ai",
+        "agents",
+        "dev",
+        "guidelines",
+        "skills"
+    ],
+    "suggest": {
+        "laravel/boost": "Integrates package guidelines and skills with Laravel Boost."
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
