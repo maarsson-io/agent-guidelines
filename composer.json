@@ -1,0 +1,32 @@
+{
+    "name": "maarsson/agent-guidelines",
+    "description": "Reusable, opinionated guidelines and skills for AI coding agents.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "ai",
+        "agents",
+        "dev",
+        "guidelines",
+        "skills"
+    ],
+    "require": {
+        "laravel/boost": "^2.0"
+    },
+    "require-dev": {
+        "symfony/yaml": "^7.0"
+    },
+    "authors": [
+        {
+            "name": "VMaarsson",
+            "email": "viktor@maarsson.io"
+        }
+    ],
+    "bin": [
+        "bin/agent-guidelines-init",
+        "bin/agent-guidelines-link-skills"
+    ],
+    "config": {
+        "sort-packages": true
+    }
+}

@@ -1,0 +1,89 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Validate every destination before creating directories or links.
+ *
+ * @param string $root
+ * @return void
+ * @throws RuntimeException
+ */
+function checkSkillLinkDestinations(string $root): void
+{
+    foreach (['.agents', '.claude', '.github'] as $directory) {
+        $path = $root.'/'.$directory;
+        if (is_link($path) || (file_exists($path) && ! is_dir($path))) {
+            throw new RuntimeException("{$path} must be a real directory; nothing was replaced.");
+        }
+    }
+
+    $canonical = $root.'/.agents/skills';
+    if (is_link($canonical) || (file_exists($canonical) && ! is_dir($canonical))) {
+        throw new RuntimeException("{$canonical} must be a real directory; nothing was replaced.");
+    }
+
+    foreach (['.claude/skills', '.github/skills'] as $destination) {
+        $path = $root.'/'.$destination;
+        if (is_link($path)) {
+            $matches = readlink($path) === '../.agents/skills'
+                || (is_dir($canonical) && realpath($path) === realpath($canonical));
+            if (! $matches) {
+                throw new RuntimeException("{$path} points elsewhere; nothing was replaced.");
+            }
+        } elseif (file_exists($path)) {
+            throw new RuntimeException("{$path} already exists. Move or merge its contents manually before retrying; nothing was replaced.");
+        }
+    }
+}
+
+/**
+ * Create a directory without replacing anything that already exists.
+ *
+ * @param string $path
+ * @return void
+ * @throws RuntimeException
+ */
+function createSkillDirectory(string $path): void
+{
+    if (! is_dir($path) && ! mkdir($path, 0755, true) && ! is_dir($path)) {
+        throw new RuntimeException("Cannot create directory: {$path}");
+    }
+}
+
+try {
+    $arguments = array_slice($argv, 1);
+    if ($arguments === ['--help'] || $arguments === ['-h']) {
+        echo "Usage: agent-guidelines-link-skills [project-directory]\n";
+        echo "Defaults to the current directory. Run before php artisan boost:install.\n";
+        exit(0);
+    }
+    if (count($arguments) > 1 || (isset($arguments[0]) && str_starts_with($arguments[0], '-'))) {
+        throw new RuntimeException('Usage: agent-guidelines-link-skills [project-directory]');
+    }
+
+    $root = realpath($arguments[0] ?? getcwd());
+    if ($root === false || ! is_dir($root) || ! is_file($root.'/composer.json')) {
+        throw new RuntimeException('Run from a consumer project containing composer.json, or pass its directory.');
+    }
+
+    checkSkillLinkDestinations($root);
+    createSkillDirectory($root.'/.agents/skills');
+
+    foreach (['.claude', '.github'] as $directory) {
+        $link = $root.'/'.$directory.'/skills';
+        if (is_link($link)) {
+            echo "Already linked: {$directory}/skills\n";
+            continue;
+        }
+        createSkillDirectory($root.'/'.$directory);
+        if (! symlink('../.agents/skills', $link)) {
+            throw new RuntimeException("Cannot create symlink: {$link}");
+        }
+        echo "Linked: {$directory}/skills -> ../.agents/skills\n";
+    }
+} catch (Throwable $exception) {
+    fwrite(STDERR, 'Skill linking failed: '.$exception->getMessage().PHP_EOL);
+    exit(1);
+}
