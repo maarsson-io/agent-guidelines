@@ -51,7 +51,7 @@ Then run `composer agent-skills:link`. Merge this entry into any existing script
 
 In the installer, enable guidelines and skills, select your coding agents, and tick **`maarsson/agent-guidelines`** when prompted: "Which third-party AI guidelines/skills would you like to install?"
 
-Boost saves this selection in `boost.json`. It includes this package's core guideline in the selected agents' instruction files and copies the four skills, including their supporting files, into the agents' skills directories. See the [Laravel Boost documentation](https://laravel.com/framework/docs/13.x/boost) for agent setup details.
+Boost saves this selection in `boost.json`. It includes this package's core guideline in the selected agents' instruction files and copies the package’s skills, including their supporting files, into the agents' skills directories. See the [Laravel Boost documentation](https://laravel.com/framework/docs/13.x/boost) for agent setup details.
 
 > ### Non-interactive installation
 >
@@ -67,6 +67,7 @@ Boost saves this selection in `boost.json`. It includes this package's core guid
 >     "skills": [
 >         "laravel-best-practices-overlay",
 >         "vue-frontend-best-practices",
+>         "laravel-permissions",
 >         "specification-driven-development",
 >         "code-reviewing"
 >     ]
@@ -116,6 +117,7 @@ The package's `maintainer.md` and `project.md` guidelines check for these local 
 | --- | --- |
 | [laravel-best-practices-overlay](resources/boost/skills/laravel-best-practices-overlay/SKILL.md) | Design defaults for new Laravel/PHP implementations and Blade templates, complementing Boost without requiring convention-only legacy rewrites. |
 | [vue-frontend-best-practices](resources/boost/skills/vue-frontend-best-practices/SKILL.md) | Design defaults for new Vue components and pages, including presentation, notifications, and localization, respecting the installed Vue/Nuxt version. |
+| [laravel-permissions](resources/boost/skills/laravel-permissions/SKILL.md) | Permission-based authorization rules using Laravel Policies, FormRequests, visibility scopes, and Spatie permissions. |
 | [specification-driven-development](resources/boost/skills/specification-driven-development/SKILL.md) | Define intent, write specifications before implementing new features or comprehensive changes, and verify the result against them. |
 | [code-reviewing](resources/boost/skills/code-reviewing/SKILL.md) | Read-only review of selected changes for concrete defects, regressions, and production risks. |
 

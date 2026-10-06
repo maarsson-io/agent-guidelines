@@ -54,6 +54,7 @@ The following skills are maintained by this package. When installed, activate th
 | --- | --- |
 | When planning, writing, or reviewing new Laravel/PHP implementations, including new code within existing files | `laravel-best-practices-overlay` |
 | When planning, writing, or reviewing new Vue frontend implementations, following the installed Vue/Nuxt version | `vue-frontend-best-practices` |
+| When planning, implementing, or reviewing changes to roles, permissions, authorization, record visibility, or permission-aware UI | `laravel-permissions` |
 | When planning or implementing new application features or comprehensive changes | `specification-driven-development` |
 | When asked for code review or pre-commit/pre-merge assessment | `code-reviewing` |
 
