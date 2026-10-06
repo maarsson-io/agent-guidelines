@@ -20,6 +20,7 @@ Run these commands in the consumer Laravel project:
 
 ```bash
 composer require --dev maarsson/agent-guidelines
+vendor/bin/agent-guidelines-init
 vendor/bin/agent-guidelines-link-skills
 php artisan boost:install
 ```
@@ -73,6 +74,30 @@ Boost saves this selection in `boost.json`. It includes this package's core guid
 > ```
 >
 > Adapt this example to your agents and features; preserve other installed skills in an existing configuration.
+
+## Project-specific guidelines and skills
+
+The [templates](resources/templates/) provide a local project index and separate files for context, backend, frontend, documentation locations, tooling, testing, integrations, and infrastructure. The initializer creates missing files under `.agents/guidelines/` and skips existing files. Adapt the templates to verified project facts; placeholders do not establish facts or exceptions.
+
+The package's shared `project.md` delegates to `.agents/guidelines/project.md`. That local index routes to the relevant project files. Shared rules remain in the installed package; local rules and explicit exceptions take precedence.
+
+The default maintainer profile remains active unless the consumer has its own `.agents/guidelines/maintainer.md`. To create a local replacement template explicitly:
+
+```bash
+vendor/bin/agent-guidelines-init --maintainer
+```
+
+For domain or integration skills, create an editable source with a descriptive name:
+
+```bash
+vendor/bin/agent-guidelines-init --skill=project-integration
+```
+
+This creates `.ai/skills/project-integration/SKILL.md`. Adapt its description, scope, contracts, and rules, then add the skill's name and activation conditions to the relevant local guideline, such as `project/context.md` or `project/integrations.md`.
+
+Run `php artisan boost:install` after adapting a new skill, or `php artisan boost:update` to sync custom skills in an already configured project. Boost discovers the maintained sources in `.ai/skills/` and installs them in the shared `.agents/skills/` directory when the skill-directory links are configured. Keep these local sources in the consumer repository; they are not files maintained by this package.
+
+The initializer does not invoke Boost or create skill-directory links. Run `agent-guidelines-link-skills` before the Boost installer as shown above. Both initialization options may be combined, and an optional project-directory argument is supported. No existing file is overwritten; symlinked parent directories and directory conflicts are rejected.
 
 ## How instructions are loaded
 
