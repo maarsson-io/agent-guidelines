@@ -38,3 +38,6 @@ jobs:
 
       - name: Test skill directory linking
         run: php tests/link_skills.php
+
+      - name: Test project initialization
+        run: php tests/initialize_project.php
