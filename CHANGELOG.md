@@ -2,7 +2,7 @@
 
 All notable changes to `maarsson/agent-guidelines` will be documented in this file.
 
-## Unreleased
+## 1.0.0 - 2026-10-06
 
 - Initial package structure with shared guidelines and an additive Laravel Boost overlay.
 - Reusable skills for Laravel/PHP development, Vue frontend development, specification-driven development, and code review.
