@@ -1,0 +1,159 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Read a template before making changes to the consumer project.
+ *
+ * @param string $path
+ * @return string
+ * @throws RuntimeException
+ */
+function readProjectTemplate(string $path): string
+{
+    $content = file_get_contents($path);
+    if ($content === false) {
+        throw new RuntimeException("Cannot read template: {$path}");
+    }
+
+    return $content;
+}
+
+/**
+ * Reject directory conflicts and symlinked parents before creating any files.
+ *
+ * @param string $root
+ * @param list<string> $destinations
+ * @return void
+ * @throws RuntimeException
+ */
+function checkTemplateDestinations(string $root, array $destinations): void
+{
+    foreach ($destinations as $relative) {
+        $target = $root.'/'.$relative;
+        if (is_dir($target) && ! is_link($target)) {
+            throw new RuntimeException("{$target} is a directory; nothing was replaced.");
+        }
+        for ($parent = dirname($target); $parent !== $root; $parent = dirname($parent)) {
+            if (is_link($parent) || (file_exists($parent) && ! is_dir($parent))) {
+                throw new RuntimeException("{$parent} must be a real directory; nothing was replaced.");
+            }
+        }
+    }
+}
+
+/**
+ * Create a template file exclusively, preserving any existing destination.
+ *
+ * @param string $target
+ * @param string $content
+ * @return bool Whether a file was created.
+ * @throws RuntimeException
+ */
+function createProjectTemplate(string $target, string $content): bool
+{
+    if (file_exists($target) || is_link($target)) {
+        return false;
+    }
+    $directory = dirname($target);
+    if (! is_dir($directory) && ! mkdir($directory, 0755, true) && ! is_dir($directory)) {
+        throw new RuntimeException("Cannot create directory: {$directory}");
+    }
+
+    // Exclusive creation prevents overwriting a file that appeared after preflight.
+    $handle = @fopen($target, 'x');
+    if ($handle === false) {
+        if (file_exists($target) || is_link($target)) {
+            return false;
+        }
+        throw new RuntimeException("Cannot create template: {$target}");
+    }
+    try {
+        $written = fwrite($handle, $content);
+    } finally {
+        fclose($handle);
+    }
+    if ($written !== strlen($content)) {
+        unlink($target);
+        throw new RuntimeException("Could not write the complete template: {$target}");
+    }
+
+    return true;
+}
+
+try {
+    $arguments = array_slice($argv, 1);
+    if ($arguments === ['--help'] || $arguments === ['-h']) {
+        echo "Usage: agent-guidelines-init [project-directory] [--maintainer] [--skill=<name>]\n";
+        echo "Creates project guideline templates; existing files are skipped.\n";
+        echo "--maintainer also creates a local profile replacing the package default.\n";
+        echo "--skill=<name> also creates a domain skill source under .ai/skills/.\n";
+        exit(0);
+    }
+
+    $projectDirectory = null;
+    $includeMaintainer = false;
+    $skillName = null;
+    foreach ($arguments as $argument) {
+        if ($argument === '--maintainer') {
+            $includeMaintainer = true;
+        } elseif (str_starts_with($argument, '--skill=')) {
+            if ($skillName !== null) {
+                throw new RuntimeException('Specify only one --skill per invocation.');
+            }
+            $skillName = substr($argument, strlen('--skill='));
+            if (strlen($skillName) > 64 || preg_match('/\A[a-z0-9]+(?:-[a-z0-9]+)*\z/', $skillName) !== 1) {
+                throw new RuntimeException('Skill names must contain lowercase letters, digits, and single hyphens, with at most 64 characters.');
+            }
+        } elseif (str_starts_with($argument, '-') || $projectDirectory !== null) {
+            throw new RuntimeException('Usage: agent-guidelines-init [project-directory] [--maintainer] [--skill=<name>]');
+        } else {
+            $projectDirectory = $argument;
+        }
+    }
+
+    $root = realpath($projectDirectory ?? getcwd());
+    if ($root === false || ! is_dir($root) || ! is_file($root.'/composer.json')) {
+        throw new RuntimeException('Run from a consumer project containing composer.json, or pass its directory.');
+    }
+    $templatesDirectory = dirname(__DIR__).'/resources/templates';
+    $guidelinesDirectory = $templatesDirectory.'/guidelines';
+    $templates = [];
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($guidelinesDirectory, FilesystemIterator::SKIP_DOTS),
+    );
+    foreach ($iterator as $file) {
+        if ($file->isFile() && $file->getExtension() === 'md') {
+            $relative = substr($file->getPathname(), strlen($guidelinesDirectory) + 1);
+            $templates['.agents/guidelines/'.$relative] = readProjectTemplate($file->getPathname());
+        }
+    }
+    if ($includeMaintainer) {
+        $templates['.agents/guidelines/maintainer.md'] = readProjectTemplate($templatesDirectory.'/maintainer.md');
+    }
+    if ($skillName !== null) {
+        $templates['.ai/skills/'.$skillName.'/SKILL.md'] = str_replace(
+            '{{skill-name}}', $skillName, readProjectTemplate($templatesDirectory.'/skills/SKILL.md'),
+        );
+    }
+    ksort($templates);
+    checkTemplateDestinations($root, array_keys($templates));
+
+    $created = 0;
+    foreach ($templates as $relative => $content) {
+        if (createProjectTemplate($root.'/'.$relative, $content)) {
+            echo "Created: {$relative}\n";
+            $created++;
+        } else {
+            echo "Skipped existing: {$relative}\n";
+        }
+    }
+    printf("Created %d file(s). Adapt templates before using them as project instructions.\n", $created);
+    if ($skillName !== null) {
+        echo "Adapt the skill's description and content, and route relevant tasks to {$skillName} from your local guidelines.\n";
+    }
+} catch (Throwable $exception) {
+    fwrite(STDERR, 'Project initialization failed: '.$exception->getMessage().PHP_EOL);
+    exit(1);
+}

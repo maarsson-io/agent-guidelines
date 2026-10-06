@@ -23,6 +23,7 @@
         }
     ],
     "bin": [
+        "bin/agent-guidelines-init",
         "bin/agent-guidelines-link-skills"
     ],
     "config": {
