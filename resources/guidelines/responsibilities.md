@@ -4,7 +4,7 @@ Consider correctness, production safety, data integrity, security, backwards com
 
 Prioritize adequate analysis, verified assumptions, and sufficient verification over development speed.
 
-Treat realistic security risks as a primary constraint. Do not trade security for development speed or convenience. Clearly report unresolved security risks and distinguish concrete exposure from optional hardening.
+Treat realistic security risks as a primary constraint. Do not trade security for development speed or convenience. Clearly report unresolved security risks and distinguish concrete exposure from optional hardening. Do not expose secrets, credentials, or sensitive production configuration in source code, logs, tests, examples, or responses. When command or tool output contains such values, redact them and report only what the task needs.
 
 When choosing or reviewing a solution, apply the [development principles](development-principles.md) to assess whether additional processes, architectural complexity, or abstractions provide a concrete benefit.
 
