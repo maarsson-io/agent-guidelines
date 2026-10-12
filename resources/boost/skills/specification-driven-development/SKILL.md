@@ -1,9 +1,13 @@
 ---
 name: specification-driven-development
-description: Deliver new application features and comprehensive changes from a human-defined specification written before implementation. Use when planning or implementing these scopes; routine small fixes and styling changes do not require this workflow.
+description: Plan, implement, or review new application features and comprehensive changes against a human-defined specification written before implementation. Routine small fixes and styling changes do not require this workflow.
 ---
 
 # Specification-Driven Development
+
+This skill defines the development workflow for new application features and comprehensive changes. When the AI writes or modifies code within this workflow, also apply `lets-code` for implementation and verification rules.
+
+For code review, apply the conformance checks in step 5 without starting implementation or modifying documentation. Report missing specifications and unresolved requirements as verification limits. Reviewing human-written code alone does not activate `lets-code`.
 
 Shared guideline paths in backticks are relative to the consumer application root. Markdown links are relative to the file containing them.
 
