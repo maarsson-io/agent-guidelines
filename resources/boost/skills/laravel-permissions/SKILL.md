@@ -46,7 +46,7 @@ The names used for illustration are placeholders:
 
 ## Permission naming
 
-Name permissions `resource.action[-scope]`, for example `absences.update` or `absences.update-own`.
+Name permissions `resource.action[.scope]`, for example `absences.update` or `absences.update.own`.
 
 - Use Laravel's Policy ability names for the action of a model-bound resource: `view`, `create`, `update`, `delete`, and `restore` or `force-delete` where they apply. Listing is covered by `view`; do not introduce a separate listing action.
 - Use a business-specific action for capabilities that are not CRUD.
@@ -54,7 +54,7 @@ Name permissions `resource.action[-scope]`, for example `absences.update` or `ab
 
 Do not mechanically create one permission per route. A permission may authorize several endpoints, and an endpoint may accept any of several permissions.
 
-Do not create a generic permission when scoped permissions fully express the capability. If `create-own` and `create-all` cover creation, do not also add `create` unless it has a separate business meaning.
+Do not create a generic permission when scoped permissions fully express the capability. If `create.own` and `create.all` cover creation, do not also add `create-all` unless it has a separate business meaning.
 
 ## Permission catalog
 
@@ -173,7 +173,7 @@ Never rely on:
 - frontend route guards;
 - role or permission names sent by the client.
 
-When a permission grants scoped access, enforce both the capability and the scope condition. Holding `update-own` is not enough without the record belonging to the user, and owning the record is not enough without the permission.
+When a permission grants scoped access, enforce both the capability and the scope condition. Holding `update.own` is not enough without the record belonging to the user, and owning the record is not enough without the permission.
 
 ## Testing requirements
 
