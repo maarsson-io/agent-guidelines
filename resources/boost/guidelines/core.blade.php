@@ -56,7 +56,7 @@ The following skills are maintained by this package. When installed, activate th
 | When planning, writing, or reviewing new Vue frontend implementations, following the installed Vue/Nuxt version | `vue-frontend-best-practices` |
 | When planning, implementing, or reviewing changes to roles, permissions, authorization, record visibility, or permission-aware UI | `laravel-permissions` |
 | When planning, implementing, or reviewing new application features or comprehensive changes | `specification-driven-development` |
-| When the AI writes or modifies code | `lets-code`; also apply `specification-driven-development` when its scope applies |
+| When the AI writes or modifies code | `lets-code` |
 | When asked for code review or pre-commit/pre-merge assessment | `code-reviewing` |
 
 For supporting skills supplied by Boost or other packages, activate them when installed and relevant:
