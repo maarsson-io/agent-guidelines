@@ -2,15 +2,9 @@
 
 Reusable, opinionated guidelines and skills for AI coding agents.
 
-<div aria-hidden="true">
-
 [![Latest Stable Version](https://img.shields.io/github/v/release/maarsson-io/agent-guidelines?label=Latest)](https://github.com/maarsson-io/agent-guidelines/releases)
-[![Test](https://github.com/maarsson-io/agent-guidelines/actions/workflows/validate.yml/badge.svg?branch=master)][GHA-test]
+[![Tests](https://github.com/maarsson-io/agent-guidelines/actions/workflows/validate.yml/badge.svg?branch=master)](https://github.com/maarsson-io/agent-guidelines/actions/workflows/validate.yml)
 [![License](https://img.shields.io/github/license/maarsson-io/agent-guidelines)](https://github.com/maarsson-io/agent-guidelines/blob/master/LICENSE)
-
-[GHA-test]: https://github.com/maarsson-io/agent-guidelines/actions/workflows/validate.yml
-
-</div>
 
 Shared instructions are intended for use across projects. Project-specific templates provide a starting point for local rules and context. Also an additive overlay for Laravel Boost.
 
