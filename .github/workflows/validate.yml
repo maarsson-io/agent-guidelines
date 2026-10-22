@@ -26,6 +26,8 @@ jobs:
           php-version: '8.3'
           tools: composer:v2
           coverage: none
+        env:
+          update: true
 
       - name: Validate Composer manifest
         run: composer --no-plugins --no-scripts validate --strict --no-check-lock
