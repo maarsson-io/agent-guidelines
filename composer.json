@@ -14,7 +14,7 @@
         "laravel/boost": "^2.0"
     },
     "require-dev": {
-        "symfony/yaml": "^7.0"
+        "symfony/yaml": "^7.0 || ^8.0"
     },
     "authors": [
         {
